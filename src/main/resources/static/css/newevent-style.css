@@ -1,0 +1,18 @@
+body{
+    background-color: #282c34;
+    font-family: helvetica;
+}
+
+input{
+    border: none;
+    border-radius: 20px;
+}
+
+#add-button{
+    background-color: Rgb(255,165,0);
+    color: #282c34;
+}
+
+h5{
+    color:Rgb(255,165,0);
+}
