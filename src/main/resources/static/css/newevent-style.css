@@ -3,12 +3,7 @@ body{
     font-family: helvetica;
 }
 
-input{
-    border: none;
-    border-radius: 20px;
-}
-
-#add-button{
+#add-button, #backbutton{
     background-color: Rgb(255,165,0);
     color: #282c34;
 }

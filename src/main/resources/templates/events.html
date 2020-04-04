@@ -11,10 +11,38 @@
 <div class="topnav" id="myTopnav">
     <p class="justfit"><b>JUST FIT</b></p>
 </div>
+<a th:href="@{/redirectToAddEvent}"><input type="button" class="addbutton" value="Dodaj Wydarzenie"></a>
 
-<button type="button" class="addbutton" th:href="@{/redirectToAddEvent}">
-    Dodaj nowe wydarzenie
-</button>
+<div class="wrapper">
+    <div class="goalsdiv">
+        <table>
+            <tr>
+                <th>Prowadzący</th>
+                <th>Wydarzenie</th>
+                <th>Rozpoczęcie</th>
+                <th>Zakończenie</th>
+                <th>Uczestnicy</th>
+            </tr>
+            <tr th:each="event: ${eventList}">
+                <td th:text="${event.workerId}" />
+                <td th:text="${event.eventName}" />
+                <td th:text="${event.eventStartDate}" />
+                <td th:text="${event.eventEndDate}" />
+                <td th:text="${event.clientIds}" />
+                <td>
+                    <a th:href="@{/events/delete/{id}(id=${event.id})}">
+                        <input type="button" value="Delete" id="delete-button" >
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/editevent/{id}(id=${event.id})}">
+                        <input type="button" value="Edit" id="edit-button" >
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
 
 
 </body>

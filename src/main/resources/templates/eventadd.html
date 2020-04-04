@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../static/css/newevent-style.css" th:href="@{/css/newevent-style.css}" rel="stylesheet"/>
+
+</head>
+<body>
+
+<a th:href="@{/redirectToEvents}"><input type="button" id="backbutton" value="Powrót"></a>
+
+<form th:action="@{/saveevent}"  method="post" th:object="${event}">
+    <h5>ID pracownika</h5> <br />
+    <input type="number" id="workerid" name="workerid" th:field="*{workerId}"/> <br />
+    <h5>Nazwa wydarzenia</h5> <br />
+    <input type="text" id="eventname" name="eventname" th:field="*{eventName}"/> <br />
+    <h5>Data i godzina rozpoczęcia</h5> <br />
+    <input type="text" id="eventstart" name="eventstart" th:field="*{eventStartDate}"/> <br />
+    <h5>Data i godzina zakończenia</h5> <br />
+    <input type="text" id="eventsend" name="eventend" th:field="*{eventEndDate}"/> <br />
+    <input type="submit" value="Dodaj" id="add-button" />
+</form>
+</body>
+</html>

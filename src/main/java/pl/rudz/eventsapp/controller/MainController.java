@@ -7,19 +7,19 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
-    @RequestMapping("/events")
-    public String events() {
-        return "events";
-    }
-
-    @RequestMapping("/newevent")
-    public String newEvent() {
-        return "newevent";
-    }
-
-    @RequestMapping("/redirectToAddEvent")
-    public ModelAndView redirectToSignUp() {
-        return new ModelAndView("redirect:/newevent");
-    }
+//    @RequestMapping("/events")
+//    public String events() {
+//        return "events";
+//    }
+//
+//    @RequestMapping("/newevent")
+//    public String newEvent() {
+//        return "newevent";
+//    }
+//
+//    @RequestMapping("/redirectToAddEvent")
+//    public ModelAndView redirectToSignUp() {
+//        return new ModelAndView("redirect:/newevent");
+//    }
 
 }
