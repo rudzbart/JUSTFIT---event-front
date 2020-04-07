@@ -16,9 +16,9 @@
     <h5>Nazwa wydarzenia</h5> <br />
     <input type="text" id="eventname" name="eventname" th:field="*{eventName}"/> <br />
     <h5>Data i godzina rozpoczęcia</h5> <br />
-    <input type="text" id="eventstart" name="eventstart" th:field="*{eventStartDate}"/> <br />
+    <input type="datetime-local" id="eventstart" name="eventstart" th:field="*{eventStartDate}"/> <br />
     <h5>Data i godzina zakończenia</h5> <br />
-    <input type="text" id="eventsend" name="eventend" th:field="*{eventEndDate}"/> <br />
+    <input type="datetime-local" id="eventsend" name="eventend" th:field="*{eventEndDate}"/> <br />
     <input type="submit" value="Dodaj" id="add-button" />
 </form>
 </body>
