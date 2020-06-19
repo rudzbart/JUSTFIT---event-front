@@ -1,19 +1,26 @@
 package pl.rudz.eventsapp.controller;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 
+@Controller
 public class ClientController {
 
     RestTemplate restTemplate = new RestTemplate();
 
     //TODO pozbierac linki
     //PRZEMEK - pobieram token danego usera
-    public String getUserToken(){
-        ResponseEntity<String> forEntity = restTemplate.getForEntity("GET TOKENA LINK", String.class);
-        return forEntity.getBody();
+    public String getUserToken(Long clientId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization:Token", String.valueOf(clientId));
+        HttpEntity<Long> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> token = restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/clients/getToken", HttpMethod.GET, httpEntity, String.class);
+        return token.getBody();
     }
 
     //PRZEMEK - dodaje klienta do eventu

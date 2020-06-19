@@ -9,6 +9,19 @@ body{
     border-radius: 10px;
 }
 
+.returnbutton{
+    background: Rgb(255,165,0);
+    border: none;
+    border-radius: 10px;
+    font-size: 22px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
 .justfit{
     float: left;
     display: block;
@@ -44,6 +57,11 @@ body{
 
 .topnav .icon {
     display: none;
+}
+
+h1{
+    color: Rgb(255,165,0) ;
+    text-align: center;
 }
 
 @media screen and (max-width: 600px) {

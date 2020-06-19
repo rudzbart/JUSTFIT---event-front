@@ -1,6 +1,7 @@
 package pl.rudz.eventsapp.controller;
 
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,13 @@ public class EventController {
 
 
     @RequestMapping("/events")
-    public String event(Model model){
+    public String event(Model model, Long clientId){
+        //sprawdzamy token
+
+        //wyswietlanie SIEMA USERNAME TUTAJ SOM IWENTY
+
+        Long id = 0L;
+        //System.out.println(getUserToken(id));
         Event[] eventList = getAllEvents();
         for (Event e: eventList
              ) {
@@ -62,6 +69,9 @@ public class EventController {
         return "events-user";
     }
 
+    @RequestMapping("/events-fail")
+    public String redirectToEventFail() {return "events-fail";}
+
     @RequestMapping("/redirectToAddEvent")
     public String redirectToAddEvent(){
         return "redirect:/addevent";
@@ -82,5 +92,40 @@ public class EventController {
     public ModelAndView saveGoal(Event event) {
         addNewEvent(event);
         return new ModelAndView("redirect:/events");
+    }
+
+    //TODO pozbierac linki
+    //PRZEMEK - pobieram token danego usera
+    public String getUserToken(Long clientId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("id", String.valueOf(clientId));
+        HttpEntity<Long> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> token = restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/clients/getToken", HttpMethod.GET, httpEntity, String.class);
+        return token.getBody();
+    }
+
+    //PRZEMEK - dodaje klienta do eventu
+    public void addClientToEvent(Long clientId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("clientId", String.valueOf(clientId));
+        HttpEntity<Long> httpEntity = new HttpEntity<Long>(headers);
+        restTemplate.postForObject("ADD USERA DO EVENTU LINK", httpEntity, Long.class);
+    }
+
+    //PRZEMEK
+    //TODO Zmienic na przekazywanie przez body
+    public void userNotActive(Long clientId){
+        if(!isActive(clientId)){
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization:Token", String.valueOf(clientId));
+            // restTemplate.postForObject("https://justfitclient.pythonanywhere.com/account/token/destroy/", httpEntity, Long.class);
+        }
+    }
+
+    //DANIEL
+    //TODO przez body
+    public boolean isActive(Long clientId){
+        ResponseEntity<Boolean> forEnitty = restTemplate.getForEntity("https://justfitclient.pythonanywhere.com/account/properties/" + clientId, boolean.class);
+        return forEnitty.getBody();
     }
 }
