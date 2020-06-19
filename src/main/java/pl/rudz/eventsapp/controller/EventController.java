@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
@@ -23,6 +24,11 @@ public class EventController {
 
     public Event[] getAllEvents(){
         ResponseEntity<Event[]> forEntity = restTemplate.getForEntity("https://frozen-falls-21272.herokuapp.com/events/getAll", Event[].class);
+        return forEntity.getBody();
+    }
+
+    public Event getEvent(long id){
+        ResponseEntity<Event> forEntity = restTemplate.getForEntity("https://frozen-falls-21272.herokuapp.com/events/get/" + id, Event.class);
         return forEntity.getBody();
     }
 
@@ -55,6 +61,26 @@ public class EventController {
         return "events";
     }
 
+    @RequestMapping("/events-admin")
+    public String eventAdmin(Model model, Long clientId){
+        //sprawdzamy token
+
+        //wyswietlanie SIEMA USERNAME TUTAJ SOM IWENTY
+
+        Long id = 0L;
+        //System.out.println(getUserToken(id));
+        Event[] eventList = getAllEvents();
+        for (Event e: eventList
+        ) {
+            String newStartDate = e.getEventStartDate().replace('T', ' ').substring(0,e.getEventStartDate().length()-3);
+            e.setEventStartDate(newStartDate);
+            String newEndDate = e.getEventEndDate().replace('T', ' ').substring(0,e.getEventEndDate().length()-3);
+            e.setEventEndDate(newEndDate);
+        }
+        model.addAttribute("eventList", eventList);
+        return "events-admin";
+    }
+
     @RequestMapping("/events-user")
     public String eventForUser(Model model){
         Event[] eventList = getAllEvents();
@@ -69,6 +95,34 @@ public class EventController {
         return "events-user";
     }
 
+    @RequestMapping("/editevent/{id}")
+    public ModelAndView updateEvent(@PathVariable long id, Event event){
+        HttpEntity httpEntity = new HttpEntity(event);
+        restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/events/update",
+                HttpMethod.PUT,
+                httpEntity,
+                Void.class);
+        return new ModelAndView("redirect:/events-admin");
+    }
+
+    @RequestMapping("/events-edit/{id}")
+    public String editEvent(Model model, @PathVariable long id){
+        model.addAttribute("event", getEvent(id));
+        return "eventedit";
+    }
+
+    @RequestMapping("events/delete/{id}")
+    public String deleteEvent(@PathVariable long id){
+        String url = "https://frozen-falls-21272.herokuapp.com/events/get/" + id;
+        ResponseEntity<Event> forEntity = restTemplate.getForEntity(url, Event.class);
+        HttpEntity httpEntity = new HttpEntity(forEntity.getBody());
+        restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/events/delete",
+                HttpMethod.DELETE,
+                httpEntity,
+                Void.class);
+        return "events-admin";
+    }
+
     @RequestMapping("/events-fail")
     public String redirectToEventFail() {return "events-fail";}
 
@@ -77,21 +131,25 @@ public class EventController {
         return "redirect:/addevent";
     }
 
+    @RequestMapping("/redirectToEditEvent")
+    public String redirectToEditEvent(){
+        return "redirect:/events-edit";
+    }
+
     @RequestMapping("/redirectToEvents")
     public String redirectToEvents(){
         return "redirect:/events";
+    }
+
+    @RequestMapping("/redirectToEventsAdmin")
+    public String redirectToEventsAdmin(){
+        return "redirect:/events-admin";
     }
 
     @RequestMapping("/addevent")
     public String addEvent(Model model) {
         model.addAttribute("event", new Event());
         return "eventadd";
-    }
-
-    @RequestMapping(value = "/saveevent", method = RequestMethod.POST)
-    public ModelAndView saveGoal(Event event) {
-        addNewEvent(event);
-        return new ModelAndView("redirect:/events");
     }
 
     //TODO pozbierac linki
@@ -102,6 +160,12 @@ public class EventController {
         HttpEntity<Long> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<String> token = restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/clients/getToken", HttpMethod.GET, httpEntity, String.class);
         return token.getBody();
+    }
+
+    @RequestMapping(value = "/saveevent", method = RequestMethod.POST)
+    public ModelAndView saveEvent(Event event) {
+        addNewEvent(event);
+        return new ModelAndView("redirect:/events-admin");
     }
 
     //PRZEMEK - dodaje klienta do eventu

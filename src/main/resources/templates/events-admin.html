@@ -11,6 +11,7 @@
 <div class="topnav" id="myTopnav">
     <p class="justfit"><b>JUST FIT</b></p>
 </div>
+<a th:href="@{/redirectToAddEvent}"><input type="button" class="addbutton" value="Dodaj Wydarzenie"></a>
 
 <div class="wrapper">
     <div class="goalsdiv">
@@ -29,8 +30,13 @@
                 <td th:text="${event.eventEndDate}" />
                 <td th:text="${#lists.size(event.clientIds)}" />
                 <td>
-                    <a th:href="@{/events/state/{id}(id=${event.id})}">
-                        <input type="button" th:value="${state}" id="state-button" >
+                    <a th:href="@{/events/delete/{id}(id=${event.id})}">
+                        <input type="button" value="Usuń" id="delete-button" >
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/events-edit/{id}(id=${event.id})}">
+                        <input type="button" value="Edytuj" id="edit-button" >
                     </a>
                 </td>
             </tr>
