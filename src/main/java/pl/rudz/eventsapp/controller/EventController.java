@@ -60,7 +60,7 @@ public class EventController {
     }
 
     @RequestMapping("/events-admin/{id}")
-    public String eventAdmin(Model model, @PathVariable long clientId){
+    public String eventAdmin(Model model, @PathVariable long id){
         //sprawdzamy token
 
         //wyswietlanie SIEMA USERNAME TUTAJ SOM IWENTY
