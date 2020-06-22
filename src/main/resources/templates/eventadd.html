@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Wydarzenia</title>
     <link href="../static/css/newevent-style.css" th:href="@{/css/newevent-style.css}" rel="stylesheet"/>
 
 </head>
@@ -12,6 +12,9 @@
 
 <div class="wrapper">
     <div class="goalsdiv">
+        <div class="title">
+            <h4>TWORZENIE WYDARZENIA</h4>
+        </div>
         <form th:action="@{/saveevent}"  method="post" th:object="${event}">
             <h5>Dane pracownika</h5> <br />
             <select id="workers" th:field="*{workerId}">

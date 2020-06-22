@@ -50,7 +50,7 @@ body{
 
 #join-button, #left-button, #edit-button, #delete-button{
     background: Rgb(255,165,0);
-    border: none;
+    border: 1px solid black;
     border-radius: 20px;
     text-align: center;
 }
@@ -152,14 +152,19 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    background-color: Rgb(255,165,0);;
+    background-color: Rgb(255,165,0);
 }
 
 td, th {
     text-align: center;
     padding: 8px;
+
 }
 
-tr:nth-child(even) {
+.top-tr{
+    background-color: Rgb(255,165,0);
+}
+
+.child-tr{
     background-color: #50545c;
 }

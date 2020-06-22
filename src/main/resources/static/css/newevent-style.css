@@ -13,7 +13,7 @@ h5{
 }
 
 .wrapper{
-    margin-top: 260px;
+    margin-top: 280px;
     position: relative;
     top: 50%;
     left: 50%;
@@ -34,7 +34,7 @@ h5{
     padding-left: 20px;
 }
 
-#add-button, #backbutton{
+#add-button, #backbutton, #edit-button, #back-button{
     background: Rgb(255,165,0);
     border: none;
     border-radius: 20px;
@@ -43,11 +43,17 @@ h5{
     width: 80px;
 }
 
-#add-button:hover, #backbutton:hover{
+#add-button:hover, #backbutton:hover, #edit-button:hover, #back-button:hover{
     background: Rgb(255,185,0);
 }
 
 #buttondiv{
+    text-align: center;
+    padding-right: 20px;
+}
+
+.title{
+    color: Rgb(255,165,0);
     text-align: center;
     padding-right: 20px;
 }

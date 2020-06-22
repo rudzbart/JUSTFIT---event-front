@@ -7,10 +7,12 @@
 
 </head>
 <body>
-
-<a th:href="@{/redirectToEventsAdmin}"><input type="button" id="backbutton" value="Anuluj"></a>
-
+<div class="wrapper">
+    <div class="goalsdiv">
 <form th:action="@{/editevent/{eventID}(eventID=${eventID})}"  method="post" th:object="${event}">
+    <div class="title">
+        <h4>EDYCJA WYDARZENIA</h4>
+    </div>
     <h5>Dane pracownika</h5> <br />
     <select id="workers" th:field="*{workerId}">
         <option th:each="worker: ${workerlist}" th:text="${worker.getFirstName()} + ' ' + ${worker.getSurName()}" th:value="${worker.id}"></option>
@@ -20,8 +22,13 @@
     <h5>Data i godzina rozpoczęcia</h5> <br />
     <input type="datetime-local" id="eventstart" name="eventstart" th:field="*{eventStartDate}"/> <br />
     <h5>Data i godzina zakończenia</h5> <br />
-    <input type="datetime-local" id="eventsend" name="eventend" th:field="*{eventEndDate}"/> <br />
-    <input type="submit" value="Zatwierdź zmiany" id="edit-button" />
-</form>
+    <input type="datetime-local" id="eventsend" name="eventend" th:field="*{eventEndDate}"/> <br /><br />
+    <div id="buttondiv">
+    <input type="submit" value="Zatwierdź" id="edit-button" />
+    <a th:href="@{/redirectToEventsAdmin}"><input type="button" id="back-button" value="Anuluj"></a>
+    </div>
+    </form>
+    </div>
+</div>
 </body>
 </html>

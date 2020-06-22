@@ -18,13 +18,14 @@
 <div class="wrapper">
     <div class="goalsdiv">
         <table>
-            <tr>
+            <tr class="top-tr">
                 <th>Prowadzący</th>
                 <th>Wydarzenie</th>
                 <th>Rozpoczęcie</th>
                 <th>Zakończenie</th>
                 <th>Liczba uczestników</th>
             </tr>
+            <div class="child-tr">
             <tr th:each="event: ${eventList}">
                 <td th:text="${hashMap.get(event.workerId)}" />
                 <td th:text="${event.eventName}" />
@@ -42,6 +43,7 @@
                     </a>
                 </td>
             </tr>
+            </div>
         </table>
     </div>
 </div>
