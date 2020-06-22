@@ -61,8 +61,8 @@ public class EventController {
         return "events";
     }
 
-    @RequestMapping("/events-admin/{id}")
-    public String eventAdmin(Model model, @PathVariable long id){
+    @RequestMapping("/events-admin")
+    public String eventAdmin(Model model){
         //sprawdzamy token
         if(client.getIsAdmin() != true)
             return "events-fail";
@@ -81,8 +81,8 @@ public class EventController {
         return "events-admin";
     }
 
-    @RequestMapping("/editevent/{id}")
-    public ModelAndView updateEvent(@PathVariable long id, Event event){
+    @RequestMapping("/editevent/{eventID}")
+    public ModelAndView updateEvent(@PathVariable long eventID, Event event){
 
 
 
@@ -94,10 +94,10 @@ public class EventController {
         return new ModelAndView("redirect:/events-admin");
     }
 
-    @RequestMapping("/events/join/{id}")
-    public ModelAndView joinEvent(Model model, @PathVariable long id){
+    @RequestMapping("/events/join/{eventID}")
+    public ModelAndView joinEvent(Model model, @PathVariable long eventID){
 
-        String url = "https://frozen-falls-21272.herokuapp.com/events/get/" + id;
+        String url = "https://frozen-falls-21272.herokuapp.com/events/get/" + eventID;
         ResponseEntity<Event> forEntity = restTemplate.getForEntity(url, Event.class);
         HttpEntity httpEntity = new HttpEntity(forEntity.getBody());
         restTemplate.exchange( "https://frozen-falls-21272.herokuapp.com/events/join/" + client.getId(),
@@ -107,15 +107,15 @@ public class EventController {
         return new ModelAndView("redirect:/events/" + client.getId());
     }
 
-    @RequestMapping("/events-edit/{id}")
-    public String editEvent(Model model, @PathVariable long id){
-        model.addAttribute("event", getEvent(id));
+    @RequestMapping("/events-edit/{eventID}")
+    public String editEvent(Model model, @PathVariable long eventID){
+        model.addAttribute("event", getEvent(eventID));
         return "eventedit";
     }
 
-    @RequestMapping("events/delete/{id}")
-    public ModelAndView deleteEvent(@PathVariable long id){
-        String url = "https://frozen-falls-21272.herokuapp.com/events/get/" + id;
+    @RequestMapping("events/delete/{eventID}")
+    public ModelAndView deleteEvent(@PathVariable long eventID){
+        String url = "https://frozen-falls-21272.herokuapp.com/events/get/" + eventID;
         ResponseEntity<Event> forEntity = restTemplate.getForEntity(url, Event.class);
         HttpEntity httpEntity = new HttpEntity(forEntity.getBody());
         restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/events/delete",
@@ -139,13 +139,13 @@ public class EventController {
     }
 
     @RequestMapping("/redirectToEvents")
-    public String redirectToEvents(@PathVariable String id){
+    public String redirectToEvents(){
         return "redirect:/events/" + client.getId();
     }
 
     @RequestMapping("/redirectToEventsAdmin")
-    public String redirectToEventsAdmin(@PathVariable String id){
-        return "redirect:/events-admin/";
+    public String redirectToEventsAdmin(){
+        return "redirect:/events-admin";
     }
 
     @RequestMapping("/addevent")
