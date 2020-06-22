@@ -11,15 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import pl.rudz.eventsapp.model.Client;
 import pl.rudz.eventsapp.model.Event;
 
 
 @Controller
 public class EventController {
     private RestTemplate restTemplate = new RestTemplate();
+    private Client client;
 
     public EventController() {
-
+        client = new Client();
     }
 
     public Event[] getAllEvents(){
@@ -40,12 +42,12 @@ public class EventController {
                 Void.class);
     }
 
+    @RequestMapping("/events/{clientID}")
+    public String event(Model model, @PathVariable long clientID){
+        client = isActive(clientID);
+        if(client == null) return "events-fail";
 
-    @RequestMapping("/events/{id}")
-    public String event(Model model, @PathVariable long id){
-        //sprawdzamy token
-        getUserToken(id);
-        //wyswietlanie SIEMA USERNAME TUTAJ SOM IWENTY
+        model.addAttribute("client", client);
 
         Event[] eventList = getAllEvents();
         for (Event e: eventList
@@ -62,6 +64,8 @@ public class EventController {
     @RequestMapping("/events-admin/{id}")
     public String eventAdmin(Model model, @PathVariable long id){
         //sprawdzamy token
+        if(client.getIsAdmin() != true)
+            return "events-fail";
 
         //wyswietlanie SIEMA USERNAME TUTAJ SOM IWENTY
 
@@ -79,6 +83,9 @@ public class EventController {
 
     @RequestMapping("/editevent/{id}")
     public ModelAndView updateEvent(@PathVariable long id, Event event){
+
+
+
         HttpEntity httpEntity = new HttpEntity(event);
         restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/events/update",
                 HttpMethod.PUT,
@@ -89,14 +96,15 @@ public class EventController {
 
     @RequestMapping("/events/join/{id}")
     public ModelAndView joinEvent(Model model, @PathVariable long id){
+
         String url = "https://frozen-falls-21272.herokuapp.com/events/get/" + id;
         ResponseEntity<Event> forEntity = restTemplate.getForEntity(url, Event.class);
         HttpEntity httpEntity = new HttpEntity(forEntity.getBody());
-        restTemplate.exchange( "https://frozen-falls-21272.herokuapp.com/events/join/" + id,
+        restTemplate.exchange( "https://frozen-falls-21272.herokuapp.com/events/join/" + client.getId(),
                 HttpMethod.POST,
                 httpEntity,
                 Void.class);
-        return new ModelAndView("redirect:/events");
+        return new ModelAndView("redirect:/events/" + client.getId());
     }
 
     @RequestMapping("/events-edit/{id}")
@@ -106,7 +114,7 @@ public class EventController {
     }
 
     @RequestMapping("events/delete/{id}")
-    public String deleteEvent(@PathVariable long id){
+    public ModelAndView deleteEvent(@PathVariable long id){
         String url = "https://frozen-falls-21272.herokuapp.com/events/get/" + id;
         ResponseEntity<Event> forEntity = restTemplate.getForEntity(url, Event.class);
         HttpEntity httpEntity = new HttpEntity(forEntity.getBody());
@@ -114,7 +122,7 @@ public class EventController {
                 HttpMethod.DELETE,
                 httpEntity,
                 Void.class);
-        return "events-admin";
+        return new ModelAndView("redirect:/events-admin/" + client.getId());
     }
 
     @RequestMapping("/events-fail")
@@ -130,14 +138,14 @@ public class EventController {
         return "redirect:/events-edit";
     }
 
-    @RequestMapping("/redirectToEvents/{id}")
+    @RequestMapping("/redirectToEvents")
     public String redirectToEvents(@PathVariable String id){
-        return "redirect:/events"+id;
+        return "redirect:/events/" + client.getId();
     }
 
-    @RequestMapping("/redirectToEventsAdmin/{id}")
+    @RequestMapping("/redirectToEventsAdmin")
     public String redirectToEventsAdmin(@PathVariable String id){
-        return "redirect:/events-admin/"+id;
+        return "redirect:/events-admin/";
     }
 
     @RequestMapping("/addevent")
@@ -146,8 +154,6 @@ public class EventController {
         return "eventadd";
     }
 
-    //TODO pozbierac linki
-    //PRZEMEK - pobieram token danego usera
     public String getUserToken(Long clientId){
         HttpHeaders headers = new HttpHeaders();
         headers.add("id", String.valueOf(clientId));
@@ -162,29 +168,16 @@ public class EventController {
         return new ModelAndView("redirect:/events-admin");
     }
 
-    //PRZEMEK - dodaje klienta do eventu
-    public void addClientToEvent(Long clientId){
+    public Client isActive(Long clientId){
         HttpHeaders headers = new HttpHeaders();
-        headers.add("clientId", String.valueOf(clientId));
-        HttpEntity<Long> httpEntity = new HttpEntity<Long>(headers);
-        restTemplate.postForObject("ADD USERA DO EVENTU LINK", httpEntity, Long.class);
-    }
-
-    //PRZEMEK
-    //TODO Zmienic na przekazywanie przez body
-    public void userNotActive(Long clientId){
-        if(!isActive(clientId)){
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization:Token", String.valueOf(clientId));
-            // restTemplate.postForObject("https://justfitclient.pythonanywhere.com/account/token/destroy/", httpEntity, Long.class);
-        }
-    }
-
-    //DANIEL
-    //TODO przez body
-    public boolean isActive(Long clientId){
-        getUserToken(clientId);
-        ResponseEntity<Boolean> forEnitty = restTemplate.getForEntity("https://justfitclient.pythonanywhere.com/account/properties/" + clientId, boolean.class);
-        return forEnitty.getBody();
+        headers.add("Authorization", "token " + getUserToken(clientId));
+        HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Client> forEntity = restTemplate.exchange("https://justfitclient.pythonanywhere.com/account/properties/",
+                HttpMethod.GET,
+                httpEntity,
+                Client.class);
+        if(forEntity.getStatusCodeValue() == 200)
+        return forEntity.getBody();
+        else return null;
     }
 }
