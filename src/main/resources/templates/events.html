@@ -36,6 +36,11 @@
                         <input type="button" value="Dołącz" id="join-button">
                     </a>
                 </td>
+                <td>
+                    <a th:href="@{/events/left/{id}(id=${event.id})}">
+                        <input type="button" value="Opuść" id="left-button">
+                    </a>
+                </td>
             </tr>
         </table>
     </div>
