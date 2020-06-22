@@ -32,11 +32,6 @@ public class EventController {
         return forEntity.getBody();
     }
 
-    public String getToken(long id){
-        ResponseEntity<String> forEntity = restTemplate.getForEntity("https://frozen-falls-21272.herokuapp.com/clients/getToken/" + id, String.class);
-        return forEntity.getBody();
-    }
-
     public void addNewEvent(Event event){
         HttpEntity httpEntity = new HttpEntity(event);
         restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/events/add",
@@ -46,10 +41,10 @@ public class EventController {
     }
 
 
-    @RequestMapping("/events/{clientId}")
-    public String event(Model model, @PathVariable long clientId){
+    @RequestMapping("/events/{id}")
+    public String event(Model model, @PathVariable long id){
         //sprawdzamy token
-        System.out.println(getUserToken(clientId));
+        getUserToken(id);
         //wyswietlanie SIEMA USERNAME TUTAJ SOM IWENTY
 
         Event[] eventList = getAllEvents();
@@ -80,20 +75,6 @@ public class EventController {
         }
         model.addAttribute("eventList", eventList);
         return "events-admin";
-    }
-
-    @RequestMapping("/events-user")
-    public String eventForUser(Model model){
-        Event[] eventList = getAllEvents();
-        for (Event e: eventList
-        ) {
-            String newStartDate = e.getEventStartDate().replace('T', ' ').substring(0,e.getEventStartDate().length()-3);
-            e.setEventStartDate(newStartDate);
-            String newEndDate = e.getEventEndDate().replace('T', ' ').substring(0,e.getEventEndDate().length()-3);
-            e.setEventEndDate(newEndDate);
-        }
-        model.addAttribute("eventList", eventList);
-        return "events-user";
     }
 
     @RequestMapping("/editevent/{id}")
@@ -149,14 +130,14 @@ public class EventController {
         return "redirect:/events-edit";
     }
 
-    @RequestMapping("/redirectToEvents")
-    public String redirectToEvents(){
-        return "redirect:/events";
+    @RequestMapping("/redirectToEvents/{id}")
+    public String redirectToEvents(@PathVariable String id){
+        return "redirect:/events"+id;
     }
 
-    @RequestMapping("/redirectToEventsAdmin")
-    public String redirectToEventsAdmin(){
-        return "redirect:/events-admin";
+    @RequestMapping("/redirectToEventsAdmin/{id}")
+    public String redirectToEventsAdmin(@PathVariable String id){
+        return "redirect:/events-admin/"+id;
     }
 
     @RequestMapping("/addevent")
@@ -202,6 +183,7 @@ public class EventController {
     //DANIEL
     //TODO przez body
     public boolean isActive(Long clientId){
+        getUserToken(clientId);
         ResponseEntity<Boolean> forEnitty = restTemplate.getForEntity("https://justfitclient.pythonanywhere.com/account/properties/" + clientId, boolean.class);
         return forEnitty.getBody();
     }
