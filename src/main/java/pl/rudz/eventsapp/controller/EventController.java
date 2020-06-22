@@ -13,6 +13,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import pl.rudz.eventsapp.model.Client;
 import pl.rudz.eventsapp.model.Event;
+import pl.rudz.eventsapp.model.Worker;
+
+import java.util.HashMap;
 
 
 @Controller
@@ -26,6 +29,16 @@ public class EventController {
 
     public Event[] getAllEvents(){
         ResponseEntity<Event[]> forEntity = restTemplate.getForEntity("https://frozen-falls-21272.herokuapp.com/events/getAll", Event[].class);
+        return forEntity.getBody();
+    }
+
+    public Worker[] getAllWorkers(){
+        ResponseEntity<Worker[]> forEntity = restTemplate.getForEntity("https://worker-api-175ic-a2.herokuapp.com/getWorkersList", Worker[].class);
+        return forEntity.getBody();
+    }
+
+    public Worker getWorker(long id){
+        ResponseEntity<Worker> forEntity = restTemplate.getForEntity("https://worker-api-175ic-a2.herokuapp.com/getWorkerById/" + id, Worker.class);
         return forEntity.getBody();
     }
 
@@ -51,42 +64,46 @@ public class EventController {
         model.addAttribute("client", client);
 
         Event[] eventList = getAllEvents();
+        Worker[] workerList = getAllWorkers();
+        HashMap<Integer,String> hashMap = new HashMap<Integer, String>();
         for (Event e: eventList
              ) {
+            hashMap.put(e.getWorkerId(), getWorker(e.getWorkerId()).getFirstName() + " " + getWorker(e.getWorkerId()).getSurName());
             String newStartDate = e.getEventStartDate().replace('T', ' ').substring(0,e.getEventStartDate().length()-3);
             e.setEventStartDate(newStartDate);
             String newEndDate = e.getEventEndDate().replace('T', ' ').substring(0,e.getEventEndDate().length()-3);
             e.setEventEndDate(newEndDate);
         }
+        model.addAttribute("workerList", workerList);
         model.addAttribute("eventList", eventList);
+        model.addAttribute("hashMap", hashMap);
         return "events";
     }
 
     @RequestMapping("/events-admin")
     public String eventAdmin(Model model){
-        //sprawdzamy token
         if(!client.getIsAdmin() || client.getIsAdmin() == null)
             return "events-fail";
 
-        //wyswietlanie SIEMA USERNAME TUTAJ SOM IWENTY
-
         Event[] eventList = getAllEvents();
+        HashMap<Integer,String> hashMap = new HashMap<Integer, String>();
         for (Event e: eventList
         ) {
+            hashMap.put(e.getWorkerId(), getWorker(e.getWorkerId()).getFirstName() + " " + getWorker(e.getWorkerId()).getSurName());
             String newStartDate = e.getEventStartDate().replace('T', ' ').substring(0,e.getEventStartDate().length()-3);
             e.setEventStartDate(newStartDate);
             String newEndDate = e.getEventEndDate().replace('T', ' ').substring(0,e.getEventEndDate().length()-3);
             e.setEventEndDate(newEndDate);
         }
         model.addAttribute("eventList", eventList);
+        model.addAttribute("hashMap", hashMap);
         return "events-admin";
     }
 
     @RequestMapping("/editevent/{eventID}")
-    public ModelAndView updateEvent(@PathVariable long eventID, Event event){
-        String url = "https://frozen-falls-21272.herokuapp.com/events/get/" + eventID;
-        ResponseEntity<Event> forEntity = restTemplate.getForEntity(url, Event.class);
-        HttpEntity httpEntity = new HttpEntity(forEntity);
+    public ModelAndView updateEvent(Event event, @PathVariable long eventID){
+        event.setId((int) eventID);
+        HttpEntity httpEntity = new HttpEntity(event);
         restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/events/update",
                 HttpMethod.PUT,
                 httpEntity,
@@ -123,6 +140,7 @@ public class EventController {
     @RequestMapping("/events-edit/{eventID}")
     public String editEvent(Model model, @PathVariable long eventID){
         model.addAttribute("event", getEvent(eventID));
+        model.addAttribute("workerlist", getAllWorkers());
         return "eventedit";
     }
 
@@ -164,6 +182,7 @@ public class EventController {
     @RequestMapping("/addevent")
     public String addEvent(Model model) {
         model.addAttribute("event", new Event());
+        model.addAttribute("workerList", getAllWorkers());
         return "eventadd";
     }
 

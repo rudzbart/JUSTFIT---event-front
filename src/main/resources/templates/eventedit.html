@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Wydarzenia</title>
     <link href="../static/css/newevent-style.css" th:href="@{/css/newevent-style.css}" rel="stylesheet"/>
 
 </head>
@@ -10,9 +10,11 @@
 
 <a th:href="@{/redirectToEventsAdmin}"><input type="button" id="backbutton" value="Anuluj"></a>
 
-<form th:action="@{/editevent/{id}(id=${event.id})}"  method="post" th:object="${event}">
-    <h5>ID pracownika</h5> <br />
-    <input type="number" id="workerid" name="workerid" th:field="*{workerId}"/> <br />
+<form th:action="@{/editevent/{eventID}(eventID=${eventID})}"  method="post" th:object="${event}">
+    <h5>Dane pracownika</h5> <br />
+    <select id="workers" th:field="*{workerId}">
+        <option th:each="worker: ${workerlist}" th:text="${worker.getFirstName()} + ' ' + ${worker.getSurName()}" th:value="${worker.id}"></option>
+    </select><br />
     <h5>Nazwa wydarzenia</h5> <br />
     <input type="text" id="eventname" name="eventname" th:field="*{eventName}"/> <br />
     <h5>Data i godzina rozpoczęcia</h5> <br />

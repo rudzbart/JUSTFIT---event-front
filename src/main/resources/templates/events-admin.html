@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Events</title>
+    <title>Wydarzenia</title>
     <link href="../static/css/events-style.css" th:href="@{/css/events-style.css}" rel="stylesheet"/>
 
 
@@ -24,7 +24,7 @@
                 <th>Liczba uczestników</th>
             </tr>
             <tr th:each="event: ${eventList}">
-                <td th:text="${event.workerId}" />
+                <td th:text="${hashMap.get(event.workerId)}" />
                 <td th:text="${event.eventName}" />
                 <td th:text="${event.eventStartDate}" />
                 <td th:text="${event.eventEndDate}" />
