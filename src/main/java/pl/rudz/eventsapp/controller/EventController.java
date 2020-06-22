@@ -172,7 +172,7 @@ public class EventController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "token " + getUserToken(clientId));
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Client> forEntity = restTemplate.exchange("https://justfitclient.pythonanywhere.com/account/properties/",
+        ResponseEntity<Client> forEntity = restTemplate.exchange("https://justfitclient.pythonanywhere.com/account/client/properties/",
                 HttpMethod.GET,
                 httpEntity,
                 Client.class);
