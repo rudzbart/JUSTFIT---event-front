@@ -84,10 +84,9 @@ public class EventController {
 
     @RequestMapping("/editevent/{eventID}")
     public ModelAndView updateEvent(@PathVariable long eventID, Event event){
-
-
-
-        HttpEntity httpEntity = new HttpEntity(event);
+        String url = "https://frozen-falls-21272.herokuapp.com/events/get/" + eventID;
+        ResponseEntity<Event> forEntity = restTemplate.getForEntity(url, Event.class);
+        HttpEntity httpEntity = new HttpEntity(forEntity);
         restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/events/update",
                 HttpMethod.PUT,
                 httpEntity,
@@ -136,7 +135,7 @@ public class EventController {
                 HttpMethod.DELETE,
                 httpEntity,
                 Void.class);
-        return new ModelAndView("redirect:/events-admin/" + client.getId());
+        return new ModelAndView("redirect:/events-admin");
     }
 
     @RequestMapping("/events-fail")
