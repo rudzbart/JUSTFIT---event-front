@@ -32,6 +32,11 @@ public class EventController {
         return forEntity.getBody();
     }
 
+    public String getToken(long id){
+        ResponseEntity<String> forEntity = restTemplate.getForEntity("https://frozen-falls-21272.herokuapp.com/clients/getToken/" + id, String.class);
+        return forEntity.getBody();
+    }
+
     public void addNewEvent(Event event){
         HttpEntity httpEntity = new HttpEntity(event);
         restTemplate.exchange("https://frozen-falls-21272.herokuapp.com/events/add",
@@ -41,14 +46,12 @@ public class EventController {
     }
 
 
-    @RequestMapping("/events")
-    public String event(Model model, Long clientId){
+    @RequestMapping("/events/{clientId}")
+    public String event(Model model, @PathVariable long clientId){
         //sprawdzamy token
-
+        System.out.println(getUserToken(clientId));
         //wyswietlanie SIEMA USERNAME TUTAJ SOM IWENTY
 
-        Long id = 0L;
-        //System.out.println(getUserToken(id));
         Event[] eventList = getAllEvents();
         for (Event e: eventList
              ) {
@@ -61,14 +64,12 @@ public class EventController {
         return "events";
     }
 
-    @RequestMapping("/events-admin")
-    public String eventAdmin(Model model, Long clientId){
+    @RequestMapping("/events-admin/{id}")
+    public String eventAdmin(Model model, @PathVariable long clientId){
         //sprawdzamy token
 
         //wyswietlanie SIEMA USERNAME TUTAJ SOM IWENTY
 
-        Long id = 0L;
-        //System.out.println(getUserToken(id));
         Event[] eventList = getAllEvents();
         for (Event e: eventList
         ) {
@@ -103,6 +104,18 @@ public class EventController {
                 httpEntity,
                 Void.class);
         return new ModelAndView("redirect:/events-admin");
+    }
+
+    @RequestMapping("/events/join/{id}")
+    public ModelAndView joinEvent(Model model, @PathVariable long id){
+        String url = "https://frozen-falls-21272.herokuapp.com/events/get/" + id;
+        ResponseEntity<Event> forEntity = restTemplate.getForEntity(url, Event.class);
+        HttpEntity httpEntity = new HttpEntity(forEntity.getBody());
+        restTemplate.exchange( "https://frozen-falls-21272.herokuapp.com/events/join/" + id,
+                HttpMethod.POST,
+                httpEntity,
+                Void.class);
+        return new ModelAndView("redirect:/events");
     }
 
     @RequestMapping("/events-edit/{id}")
