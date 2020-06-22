@@ -13,7 +13,7 @@
 </div>
 
 <a th:href="@{/redirectToEventsAdmin}"><input type="button" class="addbutton" value="Panel Administratora"></a>
-<h1>Witaj </h1><h1 th:value="${client.getFirstName()}"> </h1>
+<h1>Witaj </h1><h1><span th:text="${client.getFirstName()}"></span> </h1>
 
 <div class="wrapper">
     <div class="goalsdiv">
@@ -32,7 +32,7 @@
                 <td th:text="${event.eventEndDate}" />
                 <td th:text="${#lists.size(event.clientIds)}" />
                 <td>
-                    <a th:href="@{/events/join/{id}(id=${event.id}}">
+                    <a th:href="@{/events/join/{id}(id=${event.id})}">
                         <input type="button" value="Dołącz" id="join-button">
                     </a>
                 </td>

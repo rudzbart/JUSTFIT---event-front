@@ -45,6 +45,7 @@ public class EventController {
     @RequestMapping("/events/{clientID}")
     public String event(Model model, @PathVariable long clientID){
         client = isActive(clientID);
+        if(client.getIsAdmin() == null) client.setIsAdmin(false);
         if(client == null) return "events-fail";
 
         model.addAttribute("client", client);
@@ -64,7 +65,7 @@ public class EventController {
     @RequestMapping("/events-admin")
     public String eventAdmin(Model model){
         //sprawdzamy token
-        if(client.getIsAdmin() != true)
+        if(!client.getIsAdmin() || client.getIsAdmin() == null)
             return "events-fail";
 
         //wyswietlanie SIEMA USERNAME TUTAJ SOM IWENTY
@@ -101,7 +102,7 @@ public class EventController {
         ResponseEntity<Event> forEntity = restTemplate.getForEntity(url, Event.class);
         HttpEntity httpEntity = new HttpEntity(forEntity.getBody());
         restTemplate.exchange( "https://frozen-falls-21272.herokuapp.com/events/join/" + client.getId(),
-                HttpMethod.POST,
+                HttpMethod.PUT,
                 httpEntity,
                 Void.class);
         return new ModelAndView("redirect:/events/" + client.getId());
