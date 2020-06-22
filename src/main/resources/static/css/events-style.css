@@ -21,7 +21,7 @@ body{
     margin-top: 25px;
 }
 
-#admin-button{
+#admin-button, #mainpage-button{
     background: Rgb(255,165,0);
     border: none;
     border-radius: 20px;
@@ -31,7 +31,7 @@ body{
     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-#admin-button:hover{
+#admin-button:hover, #mainpage-button:hover{
     background: Rgb(255,185,0);
 }
 
@@ -156,5 +156,4 @@ table {
 td, th {
     text-align: center;
     padding: 8px;
-
 }
