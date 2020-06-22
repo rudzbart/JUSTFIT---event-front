@@ -11,3 +11,48 @@ body{
 h5{
     color:Rgb(255,165,0);
 }
+
+.wrapper{
+    margin-top: 260px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    width: 20%;
+    height: auto;
+
+}
+
+.goalsdiv{
+    background: #50545c;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+}
+
+#add-button, #backbutton{
+    background: Rgb(255,165,0);
+    border: none;
+    border-radius: 20px;
+    text-align: center;
+    height: 30px;
+    width: 80px;
+}
+
+#add-button:hover, #backbutton:hover{
+    background: Rgb(255,185,0);
+}
+
+#buttondiv{
+    text-align: center;
+    padding-right: 20px;
+}
+
+input{
+    border-radius: 30px;
+    border: none;
+}

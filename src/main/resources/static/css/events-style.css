@@ -6,7 +6,33 @@ body{
 .addbutton{
     background: Rgb(255,165,0);
     border: none;
-    border-radius: 10px;
+    border-radius: 20px;
+    height: 28px;
+    width: 140px;
+    margin-top: 25px;
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.addbutton:hover{
+    background: Rgb(255,185,0);
+    border: none;
+    border-radius: 20px;
+    height: 28px;
+    margin-top: 25px;
+}
+
+#admin-button{
+    background: Rgb(255,165,0);
+    border: none;
+    border-radius: 20px;
+    height: 28px;
+    width: 140px;
+    margin-top: 25px;
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#admin-button:hover{
+    background: Rgb(255,185,0);
 }
 
 .returnbutton{
@@ -21,6 +47,18 @@ body{
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+#join-button, #left-button, #edit-button, #delete-button{
+    background: Rgb(255,165,0);
+    border: none;
+    border-radius: 20px;
+    text-align: center;
+}
+
+#join-button:hover, #left-button:hover, #edit-button:hover, #delete-button:hover{
+    background: Rgb(255,185,0);
+}
+
 
 .justfit{
     float: left;
@@ -92,7 +130,7 @@ h1{
 
 
 .wrapper{
-    margin-top: 200px;
+    margin-top: 100px;
     position: relative;
     top: 50%;
     left: 50%;
@@ -104,7 +142,7 @@ h1{
 }
 
 .goalsdiv{
-    background: white;
+    background: #50545c;
     border-radius: 10px;
     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -113,15 +151,15 @@ table {
     padding: 20px;
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 90%;
+    width: 100%;
+    background-color: Rgb(255,165,0);;
 }
 
 td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
+    text-align: center;
     padding: 8px;
 }
 
 tr:nth-child(even) {
-    background-color: #dddddd;
+    background-color: #50545c;
 }
